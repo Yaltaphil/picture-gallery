@@ -1,28 +1,50 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app>
+
+    <v-text-field
+        label="Search pictures"
+        v-model="searchString"
+        placeholder="..." class="ma-12"
+    ></v-text-field>
+    <div v-for="(picture,idx) in pictures" :key="idx">
+      <p>{{picture.previewURL}}</p>
+      <v-img    :src="picture.previewURL"></v-img>
+    </div>
+
+
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+
+  data: function () {
+    return {
+      searchString: '',
+      pictures: []
+    }
+  },
+
+  mounted: function () {
+    this.loadPics();
+  }
+  ,
+
+  methods: {
+    loadPics: function (line = '') {
+      const API_KEY = '17899782-74bede5cece1cf896ff273166';
+      const URL = "https://pixabay.com/api/?key=" + API_KEY + "&q=" + encodeURIComponent(line);
+
+      fetch(URL)
+          .then(response => response.json())
+          .then(response => {
+            this.pictures = Array.from(response.hits);
+            console.log(this.pictures);
+          })
+    }
   }
 }
-</script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+</script>
