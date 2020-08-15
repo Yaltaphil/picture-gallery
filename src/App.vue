@@ -1,50 +1,94 @@
 <template>
   <v-app>
+    <v-row align="center" justify="center">
+      <v-col cols="12" sm="6">
+        <v-text-field
+          label="Search for pictures"
+          v-model="searchString"
+          v-on:change="loadPics"
+          placeholder="Search for pictures"
+          solo
+          class="ma-12"
+        ></v-text-field>
+        <v-slider
+          v-model="picSize"
+          label="Picture sizes"
+          min="3"
+          max="12"
+          ticks="always"
+          tick-size="4"
+        ></v-slider>
+        <!-- <v-btn v-on:click="loadPics" icon>
+      <v-icon>mdi-magnify</v-icon>
+        </v-btn>-->
+      </v-col>
+    </v-row>
 
-    <v-text-field
-        label="Search pictures"
-        v-model="searchString"
-        placeholder="..." class="ma-12"
-    ></v-text-field>
-    <div v-for="(picture,idx) in pictures" :key="idx">
-      <p>{{picture.previewURL}}</p>
-      <v-img    :src="picture.previewURL"></v-img>
-    </div>
-
-
+    <v-row>
+      <v-col cols="12" sm="8" offset-sm="2">
+        <v-card>
+          <v-container fluid>
+            <v-row>
+              <v-col
+                v-for="(picture,idx) in pictures"
+                :key="idx"
+                class="d-flex child-flex"
+                :cols="picSize"
+              >
+                <v-card elevation="22" tile class="d-flex">
+                  <v-img
+                    :src="picture.largeImageURL"
+                    :lazy-src="picture.previewURL"
+                    aspect-ratio="1"
+                    class="grey lighten-2"
+                  >
+                    <template v-slot:placeholder>
+                      <v-row class="fill-height ma-0" align="center" justify="center">
+                        <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                      </v-row>
+                    </template>
+                    <v-card-text>{{ picture.user}}</v-card-text>
+                  </v-img>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-app>
 </template>
 
 <script>
-
 export default {
-  name: 'App',
+  name: "App",
 
   data: function () {
     return {
-      searchString: '',
-      pictures: []
-    }
+      searchString: "",
+      picSize: 4,
+      pictures: [],
+    };
   },
 
   mounted: function () {
     this.loadPics();
-  }
-  ,
-
+  },
   methods: {
-    loadPics: function (line = '') {
-      const API_KEY = '17899782-74bede5cece1cf896ff273166';
-      const URL = "https://pixabay.com/api/?key=" + API_KEY + "&q=" + encodeURIComponent(line);
-
+    loadPics: function (line = "love") {
+      const API_KEY = "17899782-74bede5cece1cf896ff273166";
+      const URL =
+        "https://pixabay.com/api/?key=" +
+        API_KEY +
+        "&q=" +
+        encodeURIComponent(line);
       fetch(URL)
-          .then(response => response.json())
-          .then(response => {
-            this.pictures = Array.from(response.hits);
-            console.log(this.pictures);
-          })
-    }
-  }
-}
-
+        .then((response) => response.json())
+        .then((response) => {
+          this.pictures = Array.from(response.hits);
+          console.log(this.pictures);
+        });
+    },
+  },
+};
 </script>
