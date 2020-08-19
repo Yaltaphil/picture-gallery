@@ -8,15 +8,13 @@
           v-on:change="loadPics"
           placeholder="Search for pictures"
           solo
-          class="ma-12"
+          class="mt-9"
         ></v-text-field>
         <v-slider
           v-model="picSize"
-          label="Picture sizes"
-          min="3"
+          label="Size"
+          min="2"
           max="12"
-          ticks="always"
-          tick-size="4"
         ></v-slider>
         <!-- <v-btn v-on:click="loadPics" icon>
       <v-icon>mdi-magnify</v-icon>
@@ -25,7 +23,7 @@
     </v-row>
 
     <v-row>
-      <v-col cols="12" sm="8" offset-sm="2">
+      <v-col cols="12" sm="10" offset-sm="1">
         <v-card>
           <v-container fluid>
             <v-row>
@@ -35,9 +33,9 @@
                 class="d-flex child-flex"
                 :cols="picSize"
               >
-                <v-card elevation="22" tile class="d-flex">
+                <v-card elevation="4" tile class="d-flex">
                   <v-img
-                    :src="picture.largeImageURL"
+                    :src="picture.webformatURL"
                     :lazy-src="picture.previewURL"
                     aspect-ratio="1"
                     class="grey lighten-2"
@@ -47,7 +45,7 @@
                         <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
                       </v-row>
                     </template>
-                    <v-card-text>{{ picture.user}}</v-card-text>
+                    <!-- <v-card-text>{{ picture.user}}</v-card-text> -->
                   </v-img>
                 </v-card>
               </v-col>
@@ -66,7 +64,7 @@ export default {
   data: function () {
     return {
       searchString: "",
-      picSize: 4,
+      picSize: 3,
       pictures: [],
     };
   },
@@ -81,7 +79,8 @@ export default {
         "https://pixabay.com/api/?key=" +
         API_KEY +
         "&q=" +
-        encodeURIComponent(line);
+        encodeURIComponent(line) +
+        "&per_page=40&image_type=photo";
       fetch(URL)
         .then((response) => response.json())
         .then((response) => {
