@@ -4,8 +4,8 @@
       <v-col cols="12" sm="6">
         <v-text-field
           label="Search for pictures"
-          v-model="searchString"
-          v-on:change="loadPics"
+          v-model.lazy.trim="searchString"
+          @change="loadPics"
           placeholder="Search for pictures"
           solo
           class="mt-9"
@@ -16,9 +16,6 @@
           min="2"
           max="12"
         ></v-slider>
-        <!-- <v-btn v-on:click="loadPics" icon>
-      <v-icon>mdi-magnify</v-icon>
-        </v-btn>-->
       </v-col>
     </v-row>
 
@@ -38,14 +35,13 @@
                     :src="picture.webformatURL"
                     :lazy-src="picture.previewURL"
                     aspect-ratio="1"
-                    class="grey lighten-2"
+                    class="grey lighten-5"
                   >
                     <template v-slot:placeholder>
                       <v-row class="fill-height ma-0" align="center" justify="center">
                         <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
                       </v-row>
                     </template>
-                    <!-- <v-card-text>{{ picture.user}}</v-card-text> -->
                   </v-img>
                 </v-card>
               </v-col>
@@ -54,6 +50,7 @@
         </v-card>
       </v-col>
     </v-row>
+
   </v-app>
 </template>
 
@@ -70,16 +67,17 @@ export default {
   },
 
   mounted: function () {
-    this.loadPics();
+    this.loadPics(this.searchString);
   },
+
   methods: {
-    loadPics: function (line = "love") {
+    loadPics: function () {
       const API_KEY = "17899782-74bede5cece1cf896ff273166";
       const URL =
         "https://pixabay.com/api/?key=" +
         API_KEY +
         "&q=" +
-        encodeURIComponent(line) +
+        encodeURIComponent(this.searchString) +
         "&per_page=40&image_type=photo";
       fetch(URL)
         .then((response) => response.json())
