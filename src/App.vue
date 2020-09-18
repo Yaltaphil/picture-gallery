@@ -10,12 +10,7 @@
           solo
           class="mt-9"
         ></v-text-field>
-        <v-slider
-          v-model="picSize"
-          label="Size"
-          min="2"
-          max="12"
-        ></v-slider>
+        <v-slider v-model="picSize" label="Size" min="2" max="12"></v-slider>
       </v-col>
     </v-row>
 
@@ -30,7 +25,7 @@
                 class="d-flex child-flex"
                 :cols="picSize"
               >
-                <v-card elevation="4" tile class="d-flex">
+                <v-card elevation="2" tile class="d-flex">
                   <v-img
                     :src="picture.webformatURL"
                     :lazy-src="picture.previewURL"
@@ -50,7 +45,6 @@
         </v-card>
       </v-col>
     </v-row>
-
   </v-app>
 </template>
 
@@ -71,7 +65,7 @@ export default {
   },
 
   methods: {
-    loadPics: function () {
+    loadPics: async function () {
       const API_KEY = "17899782-74bede5cece1cf896ff273166";
       const URL =
         "https://pixabay.com/api/?key=" +
@@ -79,12 +73,14 @@ export default {
         "&q=" +
         encodeURIComponent(this.searchString) +
         "&per_page=40&image_type=photo";
-      fetch(URL)
-        .then((response) => response.json())
-        .then((response) => {
-          this.pictures = Array.from(response.hits);
-          console.log(this.pictures);
-        });
+      try {
+        let response = await fetch(URL);
+        response = await response.json();
+        this.pictures = Array.from(response.hits);
+        console.log(this.pictures);
+      } catch {
+        console.warn("Problem - no pictures loaded");
+      }
     },
   },
 };
