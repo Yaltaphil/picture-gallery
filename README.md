@@ -2,4 +2,13 @@
 
 *You can use this app for getting beautiful pictures from www.pixabay.com*  
 
-Now it's available for testing [here](http://test.yaltaphil.ru)
+Now it's available for testing [here](http://test.yaltaphil.ru)  
+
+
+```javascript
+function fancyAlert(arg) {
+  if(arg) {
+    $.facebox({div:'#foo'})
+  }
+}
+```
