@@ -1,3 +1,5 @@
 # Simple picture-gallery on vuejs and vuetify
 
-*You can use this app for getting beautiful pictures from www.pixabay.com*
+*You can use this app for getting beautiful pictures from www.pixabay.com*  
+
+Now it's available for testing [here](www.test.yaltaphil.ru)
